@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { RetellWebClient } from "retell-client-js-sdk";
+import { FaPhone, FaPhoneSlash } from "react-icons/fa"; // Import phone icons
 import "./App.css";
 
 // Get agentId from environment variable with fallback for development
@@ -13,28 +14,42 @@ const retellWebClient = new RetellWebClient();
 
 const App = () => {
   const [isCalling, setIsCalling] = useState(false);
+  const [logs, setLogs] = useState<string[]>([]); // State to store logs
+
+  const addLog = (message: string) => {
+    const timestamp = new Date().toLocaleString(); // Get local date-time
+    setLogs((prevLogs) => [...prevLogs, `${timestamp}: ${message}`]); // Append new log with timestamp
+  };
 
   // Initialize the SDK
   useEffect(() => {
     retellWebClient.on("call_started", () => {
-      console.log("call started");
+      const message = "call started";
+      console.log(message);
+      addLog(message);
     });
     
     retellWebClient.on("call_ended", () => {
-      console.log("call ended");
+      const message = "call ended";
+      console.log(message);
+      addLog(message);
       setIsCalling(false);
     });
     
     // When agent starts talking for the utterance
     // useful for animation
     retellWebClient.on("agent_start_talking", () => {
-      console.log("agent_start_talking");
+      const message = "agent_start_talking";
+      console.log(message);
+      addLog(message);
     });
     
     // When agent is done talking for the utterance
     // useful for animation
     retellWebClient.on("agent_stop_talking", () => {
-      console.log("agent_stop_talking");
+      const message = "agent_stop_talking";
+      console.log(message);
+      addLog(message);
     });
     
     // Real time pcm audio bytes being played back, in format of Float32Array
@@ -55,7 +70,9 @@ const App = () => {
     });
     
     retellWebClient.on("error", (error) => {
-      console.error("An error occurred:", error);
+      const message = `An error occurred: ${error}`;
+      console.error(message);
+      addLog(message);
       // Stop the call
       retellWebClient.stopCall();
     });
@@ -65,6 +82,7 @@ const App = () => {
     if (isCalling) {
       retellWebClient.stopCall();
     } else {
+      setLogs([]); // Clear logs when starting a new call
       const registerCallResponse = await registerCall(agentId);
       if (registerCallResponse.access_token) {
         retellWebClient
@@ -108,9 +126,36 @@ const App = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <button onClick={toggleConversation}>
-          {isCalling ? "Stop" : "Start"}
+        <button
+          style={{
+            marginBottom: "20px",
+            padding: "15px 30px", // Bigger button
+            fontSize: "18px", // Larger text
+            display: "flex",
+            alignItems: "center",
+            gap: "10px", // Space between icon and text
+          }}
+          onClick={toggleConversation}
+        >
+          {isCalling ? <FaPhoneSlash /> : <FaPhone />} {/* Icon changes based on state */}
+          {isCalling ? "End call" : "Begin call"}
         </button>
+        <div
+          style={{
+            width: "75%", // Default width for large screens
+            maxWidth: "99%", // Max width for small screens
+            height: "50vh", // Fixed height of half the screen
+            overflowY: "scroll",
+            border: "1px solid #ccc",
+            padding: "10px",
+            backgroundColor: "#f9f9f9",
+            color: "#333", // Darker text color for better readability
+          }}
+        >
+          {logs.map((log, index) => (
+            <div key={index}>{log}</div>
+          ))}
+        </div>
       </header>
     </div>
   );
