@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
-import "./App.css";
+import { useEffect, useState } from "react";
 import { RetellWebClient } from "retell-client-js-sdk";
+import "./App.css";
 
-const agentId = "ENTER_YOUR_AGENT_ID";
+// Get agentId from environment variable with fallback for development
+const agentId = process.env.REACT_APP_AGENT_ID || "";
 
 interface RegisterCallResponse {
   access_token: string;

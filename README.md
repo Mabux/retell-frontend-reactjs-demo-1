@@ -16,19 +16,25 @@ Step 1: Step up example backend
 
 1. Go to example_backend folder
 
-2. `npm install`
+2. `pnpm i`
 
-3. In `index.js` file, replace YOUR_API_KEY with your api key
+3. Create a `.env` file in the example_backend folder (or copy from `.env.example`) and set your API key:
+   ```
+   RETELL_API_KEY=your_api_key_here
+   ```
 
-4. `node index.js` 
+4. `pnpm node index.js` or `node index.js`
 
 
 Step 2: Step up frontend
 
 1. go to frontend_demo folder
 
-2. `npm install`
+2. `pnpm i`
 
-3. In `App.tsx`, replace ENTER_YOUR_AGENT_ID with your agent ID
+3. Create a `.env` file in the frontend_demo folder (or copy from `.env.example`) and set your agent ID:
+   ```
+   REACT_APP_AGENT_ID=your_agent_id_here
+   ```
 
-4. `npm run start`
+4. `pnpm start`
