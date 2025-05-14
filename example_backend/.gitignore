@@ -32,9 +32,8 @@ coverage/
 *.lcov
 
 # Environment variable files
-.env
-.env.local
-.env.*.local
+.env*
+!.env.example
 
 # OS generated files
 .DS_Store
