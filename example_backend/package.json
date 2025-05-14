@@ -1,6 +1,6 @@
 {
   "name": "example_backend",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -10,9 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^1.7.4",
+    "axios": "^1.9.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
-    "express": "^4.19.2"
+    "express": "^5.1.0"
   }
 }

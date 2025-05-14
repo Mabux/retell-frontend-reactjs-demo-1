@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+// Add the following import to polyfill process
+import process from "process";
 import { RetellWebClient } from "retell-client-js-sdk";
 import { FaPhone, FaPhoneSlash } from "react-icons/fa"; // Import phone icons
 import "./App.css";
