@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node -r dotenv/config index.js",
+    "dev": "NODE_ENV=development node -r dotenv/config index.js",
+    "prod": "NODE_ENV=production node -r dotenv/config index.js"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +16,7 @@
     "axios": "^1.9.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
+    "dotenv-expand": "^10.0.0",
     "express": "^5.1.0"
   }
 }

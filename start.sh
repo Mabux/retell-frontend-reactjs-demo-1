@@ -1,5 +1,15 @@
-#!/bin/zsh
-# filepath: /Users/marcbusch/Documents/GitHub/retell-frontend-reactjs-demo-1/start.sh
+#!/bin/bash
+
+# Set default environment to development
+ENV="dev"
+
+# Check for --prod flag
+if [ "$1" = "--prod" ]; then
+    ENV="prod"
+    echo "Starting in PRODUCTION mode..."
+else
+    echo "Starting in DEVELOPMENT mode..."
+fi
 
 # Check if pnpm is installed
 if ! command -v pnpm &> /dev/null; then
@@ -11,17 +21,38 @@ if ! command -v pnpm &> /dev/null; then
     fi
 fi
 
-echo "Starte Backend..."
+echo "Starting Backend..."
 cd backend
-pnpm node index.js &
+
+if [ "$ENV" = "prod" ]; then
+    echo "Running production backend..."
+    pnpm prod &
+else
+    echo "Running development backend..."
+    pnpm dev &
+fi
 BACKEND_PID=$!
-echo "Backend läuft (PID: $BACKEND_PID)"
+echo "Backend is running (PID: $BACKEND_PID)"
 
 cd ../frontend
-echo "Starte Frontend..."
-pnpm start &
-FRONTEND_PID=$!
-echo "Frontend läuft (PID: $FRONTEND_PID)"
+echo "Starting Frontend..."
 
-echo "Beide Prozesse laufen im Hintergrund."
-echo "Zum Beenden: kill $BACKEND_PID $FRONTEND_PID"
+if [ "$ENV" = "prod" ]; then
+    echo "Running production frontend..."
+    pnpm start:prod &
+else
+    echo "Running development frontend..."
+    pnpm start &
+fi
+FRONTEND_PID=$!
+echo "Frontend is running (PID: $FRONTEND_PID)"
+
+echo ""
+echo "Both processes are running in the background."
+echo "To stop them, run: kill $BACKEND_PID $FRONTEND_PID"
+
+# Keep the script running and handle Ctrl+C
+trap "echo 'Stopping all processes...'; kill $BACKEND_PID $FRONTEND_PID 2> /dev/null; exit" INT
+
+# Wait for all background processes to complete
+wait

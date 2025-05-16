@@ -5,9 +5,15 @@ const cors = require("cors");
 const app = express();
 const port = 8080;
 
-// Middleware to parse JSON bodies
-app.use(cors());
+// Apply CORS with default options first
+app.use(cors({
+  origin: 'http://localhost:3000', // React's default port
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 
+// Middleware to parse JSON bodies
 app.use(express.json());
 
 app.post("/create-web-call", async (req, res) => {

@@ -1,0 +1,145 @@
+// Variables
+@use 'sass:color';
+
+$primary-color: #282c34;
+$secondary-color: #61dafb;
+$text-color: #333;
+$light-bg: #f9f9f9;
+$border-color: #ccc;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin scrollable-container {
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+// Animations
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+// Main App Styles
+.App {
+  text-align: center;
+
+  &-logo {
+    height: 40vmin;
+    pointer-events: none;
+
+    @media (prefers-reduced-motion: no-preference) {
+      animation: App-logo-spin infinite 20s linear;
+    }
+  }
+
+
+  &-header {
+    background-color: $primary-color;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+  }
+
+  &-link {
+    color: $secondary-color;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: color.adjust($secondary-color, $lightness: 10%);
+    }
+  }
+}
+
+// Logs Section
+.logs {
+  width: 100%;
+  max-width: 99%;
+  height: 50vh;
+  @include scrollable-container;
+  
+  border: 1px solid $border-color;
+  padding: 1rem;
+  background-color: $light-bg;
+  color: $text-color;
+  text-align: left;
+  white-space: pre-line;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+// Button Styles
+#btnStartStop {
+  margin-bottom: 20px;
+  padding: 15px 30px;
+  font-size: 18px;
+  @include flex-center;
+  gap: 10px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  background-color: $secondary-color;
+  color: white;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: color.adjust($secondary-color, $lightness: -10%);
+  }
+}
+
+// Logs Container
+.logs-container {
+  width: 80%;
+  margin: 0 auto;
+  @include flex-center;
+  flex-direction: column;
+}
+
+// Log Controls
+.log-controls {
+  @include flex-center;
+  margin: 5px 0 15px;
+  gap: 1rem;
+}
+
+// Log Entry
+.log-entry {
+  margin-bottom: 0.5rem;
+  display: block;
+  line-height: 1.6;
+  padding: 0.5rem;
+  border-radius: 3px;
+  
+  &:hover {
+    background-color: color.adjust($light-bg, $lightness: -5%);
+  }
+}
+
+// Toggle Switch
+.detailed-log-toggle {
+  @include flex-center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  color: color.adjust($text-color, $lightness: 30%);
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $text-color;
+  }
+
+  input[type="checkbox"] {
+    cursor: pointer;
+    width: 1rem;
+    height: 1rem;
+  }
+}

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import process from "process";
 import { RetellWebClient } from "retell-client-js-sdk";
 import { FaPhone, FaPhoneSlash } from "react-icons/fa"; // Import phone icons
-import "./App.css";
+import "./App.scss";
 
 // Get agentId from environment variable with fallback for development
 const agentId = process.env.REACT_APP_AGENT_ID || "";
