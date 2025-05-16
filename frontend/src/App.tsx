@@ -104,7 +104,6 @@ const App = () => {
   const [isCalling, setIsCalling] = useState(false);
   const [currentCallId, setCurrentCallId] = useState<string | null>(null);
   const [recordingUrl, setRecordingUrl] = useState<string | null>(null);
-  const [publicLogUrl, setPublicLogUrl] = useState<string | null>(null);
   // Use a ref to always have access to the latest call ID in event handlers
   const currentCallIdRef = useRef<string | null>(null);
   
@@ -294,12 +293,9 @@ const App = () => {
       console.log('Call details received successfully');
       logCallDetails(data);
       
-      // Update the URLs from the response
+      // Update the recording URL if available
       if (data.recording_url) {
         setRecordingUrl(data.recording_url);
-      }
-      if (data.public_log_url) {
-        setPublicLogUrl(data.public_log_url);
       }
       
       return data;
@@ -318,6 +314,8 @@ const App = () => {
     } else {
       try {
         console.debug('Starting new call...');
+        // Reset recording URL when starting a new call
+        setRecordingUrl(null);
         const registerCallResponse = await registerCall(agentId);
         console.debug('Register call response:', registerCallResponse);
         
@@ -418,33 +416,36 @@ const App = () => {
           {isCalling ? <FaPhoneSlash /> : <FaPhone />} {/* Icon changes based on state */}
           {isCalling ? "End call" : "Begin call"}
         </button>
-        {/* Display recording and log URLs if available */}
-        {(recordingUrl || publicLogUrl) && (
-          <div className="call-links" style={{ marginTop: '20px', textAlign: 'center' }}>
-            {recordingUrl && (
-              <div style={{ margin: '10px 0' }}>
-                <a 
-                  href={recordingUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  style={{ color: '#61dafb', textDecoration: 'none' }}
-                >
-                  Listen to Recording
-                </a>
-              </div>
-            )}
-            {publicLogUrl && (
-              <div style={{ margin: '10px 0' }}>
-                <a 
-                  href={publicLogUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  style={{ color: '#61dafb', textDecoration: 'none' }}
-                >
-                  View Call Logs
-                </a>
-              </div>
-            )}
+        {/* Display audio player if recording is available */}
+        {recordingUrl && (
+          <div className="audio-player" style={{ 
+            marginTop: '20px', 
+            textAlign: 'center',
+            maxWidth: '300px',
+            margin: '20px auto 0',
+            padding: '10px',
+            backgroundColor: '#f5f5f5',
+            borderRadius: '8px',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+          }}>
+            <p style={{ 
+              margin: '0 0 10px 0',
+              color: '#333',
+              fontWeight: 'bold'
+            }}>
+              Call Recording
+            </p>
+            <audio 
+              controls 
+              src={recordingUrl}
+              style={{
+                width: '100%',
+                height: '40px',
+                outline: 'none'
+              }}
+            >
+              Your browser does not support the audio element.
+            </audio>
           </div>
         )}
       </header>
