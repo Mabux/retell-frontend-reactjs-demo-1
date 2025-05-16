@@ -161,13 +161,9 @@ const App = () => {
           })
           .catch(error => {
             console.error('Error fetching call details:', error);
-          })
-          .finally(() => {
-            setCurrentCallId(null);
           });
       } else {
         console.warn('No call ID available to fetch call details');
-        // Don't reset to null here as we might want to keep the ID for debugging
       }
     });
 
@@ -311,8 +307,19 @@ const App = () => {
   const toggleConversation = async () => {
     if (isCalling) {
       console.debug('Stopping call...');
+      const callId = currentCallIdRef.current;
       retellWebClient.stopCall();
-      // setCurrentCallId(null);
+      
+      // Fetch and display call details when manually ending the call
+      if (callId) {
+        console.debug('Fetching call details for manually ended call:', callId);
+        try {
+          const details = await fetchCallDetails(callId);
+          setCallDetails(details);
+        } catch (error) {
+          console.error('Error fetching call details after manual end:', error);
+        }
+      }
     } else {
       try {
         console.debug('Starting new call...');
@@ -424,22 +431,24 @@ const App = () => {
           {isCalling ? <FaPhoneSlash /> : <FaPhone />} {/* Icon changes based on state */}
           {isCalling ? "End call" : "Begin call"}
         </button>
-        {/* Display audio player if recording is available */}
-        {recordingUrl && (
+        {/* Display call details whenever we have them */}
+        {callDetails && (
           <div className="recording-container">
-            {/* Call Recording Section */}
-            <div className="recording-section">
-              <h3 className="recording-header">
-                Call Recording
-              </h3>
-              <audio 
-                className="audio-player"
-                controls 
-                src={recordingUrl}
-              >
-                Your browser does not support the audio element.
-              </audio>
-            </div>
+            {/* Call Recording Section - Only show if we have a recording URL */}
+            {recordingUrl && (
+              <div className="recording-section">
+                <h3 className="recording-header">
+                  Call Recording
+                </h3>
+                <audio 
+                  className="audio-player"
+                  controls 
+                  src={recordingUrl}
+                >
+                  Your browser does not support the audio element.
+                </audio>
+              </div>
+            )}
 
             {/* Call Details Section */}
             <div>
@@ -471,7 +480,7 @@ const App = () => {
               </div>
             </div>
 
-            {/* Transcript Section */}
+            {/* Transcript Section - Only show if we have transcript data */}
             {callDetails?.transcript && (
               <div className="transcript-section">
                 <h3 className="transcript-header">
