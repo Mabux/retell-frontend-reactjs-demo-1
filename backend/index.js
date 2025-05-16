@@ -32,6 +32,7 @@ app.post("/create-web-call", async (req, res) => {
   }
 
   try {
+    console.log('Sending request to Retell API with payload:', JSON.stringify(payload, null, 2));
     const response = await axios.post(
       "https://api.retellai.com/v2/create-web-call",
       payload,
@@ -43,13 +44,52 @@ app.post("/create-web-call", async (req, res) => {
       }
     );
 
-    res.status(201).json(response.data);
+    console.log('Received response from Retell API:', JSON.stringify(response.data, null, 2));
+    
+    // Ensure we have the call_id from the response
+    if (!response.data.call_id) {
+      console.warn('No call_id received in Retell API response');
+    }
+
+    // Include both the access token and call ID in the response
+    const responseData = {
+      access_token: response.data.access_token,
+      call_id: response.data.call_id
+    };
+    
+    console.log('Sending response to client:', JSON.stringify(responseData, null, 2));
+    res.status(201).json(responseData);
   } catch (error) {
     console.error(
       "Error creating web call:",
       error.response?.data || error.message
     );
     res.status(500).json({ error: "Failed to create web call" });
+  }
+});
+
+// New endpoint to get call details
+app.get("/get-call/:callId", async (req, res) => {
+  const { callId } = req.params;
+  
+  try {
+    const response = await axios.get(
+      `https://api.retellai.com/v2/get-call/${callId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.RETELL_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    
+    res.status(200).json(response.data);
+  } catch (error) {
+    console.error(
+      "Error fetching call details:",
+      error.response?.data || error.message
+    );
+    res.status(500).json({ error: "Failed to fetch call details" });
   }
 });
 
