@@ -143,3 +143,88 @@ $border-color: #ccc;
     height: 1rem;
   }
 }
+
+// Recording Player
+.recording-container {
+  max-width: 400px;
+  margin: 20px auto 0;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.recording-section {
+  margin-bottom: 20px;
+}
+
+.recording-header {
+  margin: 0 0 10px 0;
+  color: #2c3e50;
+  font-size: 1.1rem;
+  border-bottom: 1px solid #e1e4e8;
+  padding-bottom: 8px;
+}
+
+.audio-player {
+  width: 100%;
+  height: 40px;
+  outline: none;
+  margin-top: 10px;
+}
+
+.call-details {
+  margin: 20px 0 10px 0;
+  color: #2c3e50;
+  font-size: 1.1rem;
+  border-bottom: 1px solid #e1e4e8;
+  padding-bottom: 8px;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 8px 12px;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.detail-label {
+  font-weight: 600;
+}
+
+.detail-value {
+  &.status-completed {
+    color: #28a745;
+    font-weight: 500;
+  }
+  &.status-other {
+    color: #dc3545;
+    font-weight: 500;
+  }
+}
+
+.transcript-section {
+  margin-top: 20px;
+}
+
+.transcript-header {
+  margin: 20px 0 10px 0;
+  color: #2c3e50;
+  font-size: 1.1rem;
+  border-bottom: 1px solid #e1e4e8;
+  padding-bottom: 8px;
+}
+
+.transcript-content {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 6px;
+  border: 1px solid #e1e4e8;
+  white-space: pre-wrap;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #333;
+  max-height: 300px;
+  overflow-y: auto;
+}

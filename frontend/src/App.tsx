@@ -426,34 +426,16 @@ const App = () => {
         </button>
         {/* Display audio player if recording is available */}
         {recordingUrl && (
-          <div style={{ 
-            maxWidth: '400px',
-            margin: '20px auto 0',
-            padding: '20px',
-            backgroundColor: '#f8f9fa',
-            borderRadius: '8px',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
-          }}>
+          <div className="recording-container">
             {/* Call Recording Section */}
-            <div style={{ marginBottom: '20px' }}>
-              <h3 style={{ 
-                margin: '0 0 10px 0',
-                color: '#2c3e50',
-                fontSize: '1.1rem',
-                borderBottom: '1px solid #e1e4e8',
-                paddingBottom: '8px'
-              }}>
+            <div className="recording-section">
+              <h3 className="recording-header">
                 Call Recording
               </h3>
               <audio 
+                className="audio-player"
                 controls 
                 src={recordingUrl}
-                style={{
-                  width: '100%',
-                  height: '40px',
-                  outline: 'none',
-                  marginTop: '10px'
-                }}
               >
                 Your browser does not support the audio element.
               </audio>
@@ -461,43 +443,28 @@ const App = () => {
 
             {/* Call Details Section */}
             <div>
-              <h3 style={{
-                margin: '20px 0 10px 0',
-                color: '#2c3e50',
-                fontSize: '1.1rem',
-                borderBottom: '1px solid #e1e4e8',
-                paddingBottom: '8px'
-              }}>
+              <h3 className="call-details">
                 Call Details
               </h3>
               
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: '120px 1fr',
-                gap: '8px 12px',
-                fontSize: '0.9rem',
-                color: '#444'
-              }}>
-                <div style={{ fontWeight: '600' }}>Status:</div>
-                <div style={{
-                  color: callStatus === 'completed' ? '#28a745' : '#dc3545',
-                  fontWeight: '500'
-                }}>
+              <div className="details-grid">
+                <div className="detail-label">Status:</div>
+                <div className={`detail-value ${callStatus === 'completed' ? 'status-completed' : 'status-other'}`}>
                   {callStatus || 'N/A'}
                 </div>
                 
-                <div style={{ fontWeight: '600' }}>Call Type:</div>
+                <div className="detail-label">Call Type:</div>
                 <div>{callType || 'N/A'}</div>
                 
-                <div style={{ fontWeight: '600' }}>Started:</div>
+                <div className="detail-label">Started:</div>
                 <div>{startTime}</div>
                 
-                <div style={{ fontWeight: '600' }}>Duration:</div>
+                <div className="detail-label">Duration:</div>
                 <div>{duration}</div>
                 
                 {disconnectionReason && (
                   <>
-                    <div style={{ fontWeight: '600' }}>Ended:</div>
+                    <div className="detail-label">Ended:</div>
                     <div>{disconnectionReason}</div>
                   </>
                 )}
@@ -506,28 +473,11 @@ const App = () => {
 
             {/* Transcript Section */}
             {callDetails?.transcript && (
-              <div style={{ marginTop: '20px' }}>
-                <h3 style={{
-                  margin: '20px 0 10px 0',
-                  color: '#2c3e50',
-                  fontSize: '1.1rem',
-                  borderBottom: '1px solid #e1e4e8',
-                  paddingBottom: '8px'
-                }}>
+              <div className="transcript-section">
+                <h3 className="transcript-header">
                   Call Transcript
                 </h3>
-                <div style={{
-                  backgroundColor: '#f8f9fa',
-                  padding: '15px',
-                  borderRadius: '6px',
-                  border: '1px solid #e1e4e8',
-                  whiteSpace: 'pre-wrap',
-                  fontSize: '0.95rem',
-                  lineHeight: '1.5',
-                  color: '#333',
-                  maxHeight: '300px',
-                  overflowY: 'auto'
-                }}>
+                <div className="transcript-content">
                   {callDetails.transcript}
                 </div>
               </div>
