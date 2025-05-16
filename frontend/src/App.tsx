@@ -18,15 +18,6 @@ interface TranscriptItem {
   content: string;
 }
 
-// Interface for log entries
-interface LogEntry {
-  timestamp: string;
-  sortTime: number;
-  role: string;
-  content: string;
-  isEvent: boolean;
-}
-
 const retellWebClient = new RetellWebClient();
 
 const App = () => {
@@ -35,22 +26,6 @@ const App = () => {
   // Removed transcript tracking states as we're not showing logs in UI anymore
   // State for detailed log toggle
   // Removed showDetailedLog state as we're not showing logs in UI anymore
-
-  // Log transcript updates to console
-  const updateLog = (role: string, content: string) => {
-    const now = new Date();
-    const timestamp = now.toLocaleString('en-US', {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false
-    });
-    
-    console.debug(`[${timestamp}] ${role}: ${content}`);
-  };
   
   // For non-transcript logs
   const addLog = (message: string, isEventLog = false) => {
@@ -65,9 +40,6 @@ const App = () => {
       second: '2-digit',
       hour12: false
     });
-    
-    // Create a timestamp for sorting (milliseconds since epoch)
-    const sortTimestamp = now.getTime();
     
     // Just log to console.debug, no UI updates
     console.debug(`[${timestamp}] ${message}`);
