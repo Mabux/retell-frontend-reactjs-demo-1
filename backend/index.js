@@ -5,9 +5,24 @@ const cors = require("cors");
 const app = express();
 const port = 8080;
 
-// Apply CORS with default options first
+// Configure CORS
+const allowedOrigins = [
+  'http://localhost:3000', // Local development
+  'https://retell-demo-1-frontend-b6janbsnk-mabuxs-projects.vercel.app', // Production frontend
+  'https://retell-demo-1-frontend.vercel.app' // Also allow the main domain
+];
+
 app.use(cors({
-  origin: 'http://localhost:3000', // React's default port
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -93,7 +108,12 @@ app.get("/get-call/:callId", async (req, res) => {
   }
 });
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+// Start the server in development
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+  });
+}
+
+// Export the Express API for Vercel Serverless Functions
+module.exports = { app };

@@ -86,3 +86,4 @@ out/
 
 # Ignore Create React App specific files
 .eslintcache
+.vercel
