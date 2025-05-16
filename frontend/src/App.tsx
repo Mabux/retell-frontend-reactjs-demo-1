@@ -503,6 +503,35 @@ const App = () => {
                 )}
               </div>
             </div>
+
+            {/* Transcript Section */}
+            {callDetails?.transcript && (
+              <div style={{ marginTop: '20px' }}>
+                <h3 style={{
+                  margin: '20px 0 10px 0',
+                  color: '#2c3e50',
+                  fontSize: '1.1rem',
+                  borderBottom: '1px solid #e1e4e8',
+                  paddingBottom: '8px'
+                }}>
+                  Call Transcript
+                </h3>
+                <div style={{
+                  backgroundColor: '#f8f9fa',
+                  padding: '15px',
+                  borderRadius: '6px',
+                  border: '1px solid #e1e4e8',
+                  whiteSpace: 'pre-wrap',
+                  fontSize: '0.95rem',
+                  lineHeight: '1.5',
+                  color: '#333',
+                  maxHeight: '300px',
+                  overflowY: 'auto'
+                }}>
+                  {callDetails.transcript}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </header>
