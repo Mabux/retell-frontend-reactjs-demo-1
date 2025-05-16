@@ -104,6 +104,7 @@ const App = () => {
   const [isCalling, setIsCalling] = useState(false);
   const [currentCallId, setCurrentCallId] = useState<string | null>(null);
   const [recordingUrl, setRecordingUrl] = useState<string | null>(null);
+  const [callDetails, setCallDetails] = useState<CallDetails | null>(null);
   // Use a ref to always have access to the latest call ID in event handlers
   const currentCallIdRef = useRef<string | null>(null);
   
@@ -154,8 +155,9 @@ const App = () => {
       if (callId) {
         console.debug('Fetching call details for call ID:', callId);
         fetchCallDetails(callId)
-          .then(() => {
+          .then((callDetails) => {
             console.debug('Successfully fetched call details for:', callId);
+            setCallDetails(callDetails);
           })
           .catch(error => {
             console.error('Error fetching call details:', error);
@@ -406,6 +408,12 @@ const App = () => {
     }
   }
 
+  const callStatus = callDetails?.call_status;
+  const callType = callDetails?.call_type;
+  const startTime = callDetails?.start_timestamp ? new Date(callDetails.start_timestamp).toLocaleString() : 'N/A';
+  const duration = callDetails?.duration_ms ? `${Math.floor(callDetails.duration_ms / 60000)}m ${Math.floor((callDetails.duration_ms % 60000) / 1000)}s` : 'N/A';
+  const disconnectionReason = callDetails?.disconnection_reason;
+
   return (
     <div className="App">
       <header className="App-header">
@@ -418,34 +426,83 @@ const App = () => {
         </button>
         {/* Display audio player if recording is available */}
         {recordingUrl && (
-          <div className="audio-player" style={{ 
-            marginTop: '20px', 
-            textAlign: 'center',
-            maxWidth: '300px',
+          <div style={{ 
+            maxWidth: '400px',
             margin: '20px auto 0',
-            padding: '10px',
-            backgroundColor: '#f5f5f5',
+            padding: '20px',
+            backgroundColor: '#f8f9fa',
             borderRadius: '8px',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+            boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
           }}>
-            <p style={{ 
-              margin: '0 0 10px 0',
-              color: '#333',
-              fontWeight: 'bold'
-            }}>
-              Call Recording
-            </p>
-            <audio 
-              controls 
-              src={recordingUrl}
-              style={{
-                width: '100%',
-                height: '40px',
-                outline: 'none'
-              }}
-            >
-              Your browser does not support the audio element.
-            </audio>
+            {/* Call Recording Section */}
+            <div style={{ marginBottom: '20px' }}>
+              <h3 style={{ 
+                margin: '0 0 10px 0',
+                color: '#2c3e50',
+                fontSize: '1.1rem',
+                borderBottom: '1px solid #e1e4e8',
+                paddingBottom: '8px'
+              }}>
+                Call Recording
+              </h3>
+              <audio 
+                controls 
+                src={recordingUrl}
+                style={{
+                  width: '100%',
+                  height: '40px',
+                  outline: 'none',
+                  marginTop: '10px'
+                }}
+              >
+                Your browser does not support the audio element.
+              </audio>
+            </div>
+
+            {/* Call Details Section */}
+            <div>
+              <h3 style={{
+                margin: '20px 0 10px 0',
+                color: '#2c3e50',
+                fontSize: '1.1rem',
+                borderBottom: '1px solid #e1e4e8',
+                paddingBottom: '8px'
+              }}>
+                Call Details
+              </h3>
+              
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: '120px 1fr',
+                gap: '8px 12px',
+                fontSize: '0.9rem',
+                color: '#444'
+              }}>
+                <div style={{ fontWeight: '600' }}>Status:</div>
+                <div style={{
+                  color: callStatus === 'completed' ? '#28a745' : '#dc3545',
+                  fontWeight: '500'
+                }}>
+                  {callStatus || 'N/A'}
+                </div>
+                
+                <div style={{ fontWeight: '600' }}>Call Type:</div>
+                <div>{callType || 'N/A'}</div>
+                
+                <div style={{ fontWeight: '600' }}>Started:</div>
+                <div>{startTime}</div>
+                
+                <div style={{ fontWeight: '600' }}>Duration:</div>
+                <div>{duration}</div>
+                
+                {disconnectionReason && (
+                  <>
+                    <div style={{ fontWeight: '600' }}>Ended:</div>
+                    <div>{disconnectionReason}</div>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
         )}
       </header>
