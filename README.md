@@ -14,7 +14,7 @@ step-by-step guide on setting up Web Call.
 
 Step 1: Step up example backend
 
-1. Go to example_backend folder
+1. Go to backend folder
 
 2. `pnpm i`
 
@@ -28,11 +28,11 @@ Step 1: Step up example backend
 
 Step 2: Step up frontend
 
-1. go to frontend_demo folder
+1. go to demo folder
 
 2. `pnpm i`
 
-3. Create a `.env` file in the frontend_demo folder (or copy from `.env.example`) and set your agent ID:
+3. Create a `.env` file in the frontend folder (or copy from `.env.example`) and set your agent ID:
    ```
    REACT_APP_AGENT_ID=your_agent_id_here
    ```
